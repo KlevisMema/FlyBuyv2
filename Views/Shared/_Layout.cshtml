@@ -7,17 +7,11 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/alertify.css" integrity="sha512-MpdEaY2YQ3EokN6lCD6bnWMl5Gwk7RjBbpKLovlrH6X+DRokrPRAF3zQJl1hZUiLXfo2e9MrOt+udOnHCAmi5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/alertify.min.css" integrity="sha512-IXuoq1aFd2wXs4NqGskwX2Vb+I8UJ+tGJEu/Dc0zwLNKeQ7CW3Sr6v0yU3z5OQWe3eScVIkER4J9L7byrgR/fA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/themes/bootstrap.css" integrity="sha512-eSjlj23qCNm7hmEQiXiJGCxLVT3weZ47TdIESCNFm8LwNDBtmRAbdDXwkKLLA5HPQIR1yl9JYO0wQG6gIPJoRQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-    
-
-
 </head>
 <body>
 
@@ -33,26 +27,25 @@
                     <div class="dropdown">
                         <a class="dropbtn"><p>WOMENS</p><i class="fa-solid fa-chevron-right"></i></a>
                         <div class="dropdown-content">
-                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="1">JOGGERS</a>
-                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="2">ACCESSORIES</a>
-                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="3">HOODIES</a>
-                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="4">SHORTS</a>
-                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="5">T-SHIRTS</a>
-                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="6">VEST TOPS</a>
-                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="7">SWIMWEAR</a>
+                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="5">JOGGERS</a>
+                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="6">ACCESSORIES</a>
+                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="7">HOODIES</a>
+                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="8">SHORTS</a>
+                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="9">T-SHIRTS</a>
+                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="10">VEST TOPS</a>
+                            <a asp-action="AgeProducts"  asp-controller="AgeCategories" asp-route-id="11">SWIMWEAR</a>
                         </div>
                     </div>
 
                     <div class="dropdown">
                         <a class="dropbtn"><p>MENS</p><i class="fa-solid fa-chevron-right"></i></a>
                         <div class="dropdown-content">
-                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="1">JOGGERS</a>
-                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="2">ACCESSORIES</a>
-                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="3">HOODIES</a>
-                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="4">SHORTS</a>
-                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="5">T-SHIRTS</a>
-                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="6">VEST TOPS</a>
-                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="7">SWIMWEAR</a>
+                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="5">JOGGERS</a>
+                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="6">ACCESSORIES</a>
+                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="7">HOODIES</a>
+                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="8">SHORTS</a>
+                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="9">T-SHIRTS</a>
+                            <a asp-action="MenAgeProducts"  asp-controller="AgeCategories" asp-route-id="11">SWIMWEAR</a>
                         </div>
                     </div>
 
@@ -78,7 +71,7 @@
                                
                                 @if (User.Identity.IsAuthenticated)
                                 {
-                                     @if (User.IsInRole("Admin"))
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                                     {
                                         <a asp-action="Index" asp-controller="Admin">ADMIN</a>
                                         <a asp-action="Index" asp-controller="AgeCategories">AGE CATEGORIES</a>
@@ -88,6 +81,14 @@
                                         <a asp-action="Index" asp-controller="ProductCategories">PRODUCT CATEGORIES</a>
                                         <a asp-action="Index" asp-controller="Products">PRODUCT</a>
                                         <a asp-action="Index" asp-controller="Ratings">RATINGS</a>                   
+                                    }
+                                    else if (User.IsInRole("Worker"))
+                                    {
+                                        <a asp-action="Index" asp-controller="AgeCategories">AGE CATEGORIES</a>
+                                        <a asp-action="Index" asp-controller="ContactUs">CONTACT US</a>
+                                        <a asp-action="Index" asp-controller="ProductCategories">PRODUCT CATEGORIES</a>
+                                        <a asp-action="Index" asp-controller="Products">PRODUCT</a>
+                                        <a asp-action="Index" asp-controller="Ratings">RATINGS</a>
                                     }
                                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                                         <button type="submit">LOG OFF</button>
@@ -99,8 +100,6 @@
                                     <a asp-area="Identity" asp-page="/Account/Login">LOGIN</a>
                                     <a asp-area="Identity" asp-page="/Account/Register">REGISTER</a>
                                 }
-
-                                
                             </div>
                         </li>
                         <li><a asp-action="Index" asp-controller="WishList"><i class="fa-solid fa-heart"></i></a></li>
@@ -113,13 +112,11 @@
                 <img src="~/Images/NavBarMobile/Close.png" class="menu-icon" id="O" onclick="MenuToggle()">
                 <img src="~/Images/NavBarMobile/Open.png" class="menu-icon_2" id="X">
             </div>
-            <!--Fund Shiriti Navigimit-->
         </div>
     </div>
     
     @RenderBody()
 
-    <!--footer-->
     <div class="footer">
         <div class="container">
             <hr id="line">
@@ -158,21 +155,15 @@
 
    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script src="~/js/Typed.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
-    
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js" integrity="sha512-JnjG+Wt53GspUQXQhc+c4j8SBERsgJAoHeehagKHlxQN+MtCCmFDghX9/AcbkkNRZptyZU4zC8utK59M5L45Iw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.js" integrity="sha512-eOUPKZXJTfgptSYQqVilRmxUNYm0XVHwcRHD4mdtCLWf/fC9XWe98IT8H1xzBkLL4Mo9GL0xWMSJtgS5te9rQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
-    
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

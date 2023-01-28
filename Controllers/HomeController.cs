@@ -3,12 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using FlyBuy.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Linq;
-using SendGrid;
-using SendGrid.Helpers.Mail;
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FlyBuy.Controllers
@@ -29,7 +23,7 @@ namespace FlyBuy.Controllers
         public IActionResult Index()
         {
             ViewData["Exlusive"] = _context.Products.Where(p => p.Exclusive == true).Take(2).OrderBy(p => p.LastUpdated).ToList();
-            ViewData["Rating"] = _context.Ratings.OrderBy(t => t.Time).Take(4).ToList();
+            ViewData["Rating"] = _context.Ratings.OrderByDescending(d => d.Time).Take(4).ToList();
             ViewData["LatestProducts"] = _context.Products.Where(p => p.Exclusive == false  &&  p.Collection != "Summer").OrderByDescending(P => P.LastUpdated).Take(8).ToList();
             ViewData["AgeCategory"] = _context.AgeCategories.Where(t => t.Name == "Women" || t.Name == "Men").ToList();
             ViewData["SummerCollection"] = _context.Products.Where(p => p.Collection == "Summer").Take(4).ToList();
@@ -50,22 +44,22 @@ namespace FlyBuy.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ProductDetail(int? id)
         {
-            Random random = new Random();
+            Random random = new();
 
             if (id == null || _context.Products == null)
             {
                 return NotFound();
             }
 
-           var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(m => m.Id == id);
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            var a = await _context.Products.Where(m => m.ProductCategoryId == product.CategoryId).ToListAsync();
-            ViewBag.Suggestion = a.OrderBy(x => random.Next()).Take(4);
+            var suggestions = _context.Products.Where(m => m.ProductCategoryId == product.ProductCategoryId).ToList().Where(x => x.CategoryId == product.CategoryId).ToList();
+            ViewBag.Suggestion = suggestions.OrderBy(x => random.Next()).Take(4);
 
             return View(product);
         }
@@ -75,7 +69,5 @@ namespace FlyBuy.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
     }
 }

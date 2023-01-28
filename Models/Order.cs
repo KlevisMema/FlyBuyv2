@@ -6,7 +6,6 @@ namespace FlyBuy.Models
     {
         public int Id { get; set; }
 
-
         [Display(Name = "Full Name")]
         [Required(ErrorMessage = "Please enter your name!")]
         [StringLength(20, MinimumLength = 4)]

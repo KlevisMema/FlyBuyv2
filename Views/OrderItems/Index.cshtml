@@ -21,6 +21,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Product)
                     </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Order.CustomerName)
+                    </th>
                     <th>Total$</th>
                 </tr>
             </thead>
@@ -37,8 +40,11 @@
                         @Html.DisplayFor(modelItem => item.Order.CustomerAddress)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Product.Collection)
+                        @Html.DisplayFor(modelItem => item.Product.Name)
                     </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Order.CustomerName)
+                        </td>
                     <td>
                             @{
                                 var total = item.Price * item.Quantity;

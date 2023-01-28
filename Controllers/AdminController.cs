@@ -8,18 +8,15 @@ namespace FlyBuy.Controllers
 {
     public class AdminController : Controller
     {
-
         private readonly UserManager<ApplicationUser> UserManager;
         public RoleManager<IdentityRole> RoleManager;
         public IEnumerable<IdentityRole> Roles { get; set; }
-
 
         public AdminController(UserManager<ApplicationUser> UserManager, RoleManager<IdentityRole> RoleManager)
         {
             this.UserManager = UserManager;
             this.RoleManager = RoleManager;
         }
-
 
         [Authorize(Roles = "Admin,Manager")]
         public IActionResult Index()

@@ -2,6 +2,7 @@
 using FlyBuy.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlyBuy.Controllers
 {
@@ -15,7 +16,6 @@ namespace FlyBuy.Controllers
             _context = context;
         }
 
-        //Filter by Quarter
         [Authorize(Roles = "Admin,Manager,Worker")]
         [HttpGet]
         public IActionResult Index()
@@ -31,6 +31,35 @@ namespace FlyBuy.Controllers
             ).OrderBy(o => o.Month).ToList();
 
             return Ok(items);
+        }
+
+        [Authorize(Roles = "Admin,Manager,Worker")]
+        [HttpGet("GetProducts")]
+        public async Task<IActionResult> GetProducts()
+        {
+            var test = await _context.OrderItems.Include(p => p.Product).GroupBy(u => u.ProductId, (key, items) => new
+            {
+                ProductId = key,
+                ProductName = items.Where(x=>x.ProductId == key).Select(x=>x.Product.Name).Distinct(),
+                QuantityOrdered =  items.Where(x => x.ProductId == key).Select(q=>q.Quantity).Sum(),
+            }).ToListAsync();
+           
+            return Ok(test);
+        }
+
+        [Authorize(Roles = "Admin,Manager,Worker")]
+        [HttpGet("GetEarnings")]
+        public async Task<IActionResult> GetEarnings()
+        {
+            var earninngs = await _context.OrderItems.Include(order => order.Order)
+                                                .GroupBy(d => d.Order.CreatedDate, (key, value) => new
+            {
+                Month = key,
+                Earnings = value.Where(m => m.Order.CreatedDate == key).Select(m=>m.Price).Sum(),
+                Quantity = value.Where(m => m.Order.CreatedDate == key).Select(m => m.Quantity).Sum()
+            }).OrderBy(o => o.Month).ToListAsync();
+
+            return Ok(earninngs);
         }
     }
 }

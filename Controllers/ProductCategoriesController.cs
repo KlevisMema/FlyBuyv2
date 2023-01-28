@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FlyBuy.Data;
 using FlyBuy.Models;
-using System.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FlyBuy.Controllers
@@ -24,9 +18,9 @@ namespace FlyBuy.Controllers
         [Authorize(Roles = "Admin,Manager,Worker")]
         public async Task<IActionResult> Index()
         {
-              return _context.ProductCategories != null ? 
-                          View(await _context.ProductCategories.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.ProductCategories'  is null.");
+            return _context.ProductCategories != null ?
+                        View(await _context.ProductCategories.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.ProductCategories'  is null.");
         }
 
         [Authorize(Roles = "Admin,Manager,Worker")]
@@ -43,7 +37,7 @@ namespace FlyBuy.Controllers
             {
                 _context.Add(productCategory);
                 _context.SaveChanges();
-                
+
             }
             return new JsonResult(Ok());
         }
@@ -110,7 +104,7 @@ namespace FlyBuy.Controllers
 
         private bool ProductCategoryExists(int id)
         {
-          return (_context.ProductCategories?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.ProductCategories?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

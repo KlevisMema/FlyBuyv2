@@ -5,10 +5,14 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
+    <canvas id="myChart" width="200" height="200"></canvas>
+    <canvas id="myChart2" width="100" height="100"></canvas>
+    <canvas id="myChart3" width="100" height="100"></canvas>
 
-
-    <canvas id="myChart" width="400" height="100" ></canvas>
-    <button onclick="updateChart()" class="btn" id="btn">Display Chart</button>
+    <button onclick="updateChart()" class="btn" id="btn">Orders per month</button>
+    <button onclick="displayItem()" class="btn" id="btn2">Ordered Products</button>
+    <button onclick="displayEarnings()" class="btn" id="btn3">Earnings</button>
+  
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -18,19 +22,23 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js" integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
 
     <script>
+
+        // nr 1  chart get orders by month
 
         var grafik = document.getElementById("myChart");
         grafik.style.display = "none"
         var btn = document.getElementById("btn"); 
 
         function updateChart(){
+
             grafik.style.display = "unset";
-            btn.style.display = "none";
+            grafik2.style.display = "none";
+            grafik3.style.display = "none";
+
             async function fetchData(){
                 const url = "https://localhost:7293/api/OrderAPI/";
                 const response = await fetch(url);
@@ -51,15 +59,90 @@
 
                 myChart.update();
             });
-
-
-
         }
       
-
       const ctx = document.getElementById('myChart');
         const myChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: 'Number of Orders #',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                animations: {
+                    tension: {
+                        duration: 1000,
+                        easing: 'linear',
+                        from: 1,
+                        to: 0,
+                        loop: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+
+                    }
+                }
+            }
+        });
+
+
+        // nr 2  chart get
+
+        var grafik2 = document.getElementById("myChart2");
+        grafik2.style.display = "none"
+        var btn2 = document.getElementById("btn2");
+
+        function displayItem() {
+
+            grafik2.style.display = "unset";
+            grafik.style.display = "none";
+            grafik3.style.display  = "none";
+
+            async function fetchData() {
+                const url = "https://localhost:7293/api/OrderAPI/GetProducts";
+                const response = await fetch(url);
+                const data_points = await response.json();
+                return data_points;
+            };
+            fetchData().then(datapoints => {
+                const productName = datapoints.map(function (item) {
+                    return item.productName;
+                })
+                const quantityOrdered = datapoints.map(function (item) {
+                    return item.quantityOrdered;
+                })
+
+                myChart2.data.labels = productName;
+                myChart2.data.datasets[0].data = quantityOrdered;
+                myChart2.update();
+            });
+        }
+
+        const ctx2 = document.getElementById('myChart2');
+        const myChart2 = new Chart(ctx2, {
+            type: 'pie',
             data: {
                 labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
@@ -92,79 +175,75 @@
                 }
             }
         });
-      
-      
+
+        // nr 3 chart earnings per month
+
+        var grafik3 = document.getElementById("myChart3");
+        grafik3.style.display = "none"
+        var btn3 = document.getElementById("btn3");
+
+        function displayEarnings() {
+
+            grafik3.style.display = "unset";
+            grafik2.style.display = "none";
+            grafik.style.display = "none";
+
+            async function fetchData() {
+                const url = "https://localhost:7293/api/OrderAPI/GetEarnings";
+                const response = await fetch(url);
+                const data_points = await response.json();
+                return data_points;
+            };
+            fetchData().then(datapoints => {
+                console.log(datapoints);
+                const month = datapoints.map(function (item) {
+                    return moment().month(item.month - 1).format("MMMM");
+                })
+                const earnings = datapoints.map(function (item) {
+                    return item.earnings * item.quantity;
+                })
+               
+                myChart3.data.labels = month;
+                myChart3.data.datasets[0].data = earnings;
+                myChart3.update();
+            });
+        }
+
+        const ctx3 = document.getElementById('myChart3');
+        const myChart3 = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: 'Earnings #',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
     </script>
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*<h3>@ViewData["Title"]</h3>
-<partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-2">
-        <div class="form-container form-login">
-
-            <form id="profile-form" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-btn">
-                    </div>
-                <div class="from-group2 -re">
-                    <input asp-for="Username" class="form-edit" disabled />
-                    <label asp-for="Username" class="form-label"></label>
-                </div>
-                <div class="from-group2 -re">
-                    <input asp-for="Input.PhoneNumber" class="form-edit" />
-                    <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                </div>
-                <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-            </form>
-
-        </div>
-    </div>
-</div>*@
-
-@*@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
-*@

@@ -41,7 +41,8 @@
                         @Html.DisplayFor(modelItem => item.CustomerAddress)
                     </td>
                     <td>
-                        <a id="@item.Id" class="del-btn"><i class="far fa-trash-alt"></i></a>
+                        <a id="@item.Id" class="del-btn"><i class="far fa-trash-alt"></i></a> |
+                        <a asp-action="OrderDetails" asp-controller="OrderItems" asp-route-id="@item.Id">Details</a>
                     </td>
                 </tr>
         }

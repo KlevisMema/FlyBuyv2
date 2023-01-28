@@ -17,7 +17,6 @@ namespace FlyBuy.Data
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-
         public DbSet<ContactUs> ContactUs { get; set; }
 
     }

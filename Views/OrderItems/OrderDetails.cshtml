@@ -1,0 +1,61 @@
+﻿@model IEnumerable<OrderItem>
+
+@{
+    ViewData["Title"] = "OrderDetails";
+}
+
+<div class="body bodyTable">
+    <h2 class="Orders"><a class="btn-form">Items ordered by @ViewData["Customer"]</a></h2>
+    <div class="table-wrapper">
+        <table class="fl-table" id="#tabela">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Quantity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product.Collection)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product.Image)
+                    </th>
+                    <th>Total$</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Product.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Product.Collection)
+                        </td>
+                        <td>
+                            <img src="~/Images/Products/@item.Product.Image" alt="Product_image" width="70px">
+                        </td>
+                        <td>
+                            @{
+                                var total = item.Price * item.Quantity;
+                            }
+                            @total
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

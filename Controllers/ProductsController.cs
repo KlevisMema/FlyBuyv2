@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FlyBuy.Data;
 using FlyBuy.Models;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FlyBuy.Controllers
@@ -43,8 +38,6 @@ namespace FlyBuy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,LastUpdated,Collection,Rating,ImageFile,CategoryId,ProductCategoryId,Exclusive")] Product product)
         {
-
-
             if (ModelState.IsValid)
             {
                 string wwwRootPath = _HostEnvironment.WebRootPath;
@@ -129,7 +122,7 @@ namespace FlyBuy.Controllers
 
                     _context.Update(product);
                     await _context.SaveChangesAsync();
-            }
+                }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ProductExists(product.Id))
@@ -155,7 +148,7 @@ namespace FlyBuy.Controllers
 
             Product Produkti = _context.Products.Find(id);
 
-            if(Produkti.Image != null)
+            if (Produkti.Image != null)
             {
                 var imagePath = Path.Combine(_HostEnvironment.WebRootPath + "\\Images\\Products", Produkti.Image);
 
@@ -176,9 +169,37 @@ namespace FlyBuy.Controllers
 
         }
 
+        [Authorize(Roles = "Admin,Manager,Worker")]
+        [HttpGet]
+        public async Task<ActionResult> FilterProducts(string? productName, string? categoryName)
+        {
+            if (String.IsNullOrEmpty(productName) && String.IsNullOrEmpty(categoryName))
+                return RedirectToAction("Index");
+
+            if (!String.IsNullOrEmpty(productName) && String.IsNullOrEmpty(categoryName))
+            {
+                var filterProducts = await _context.Products.Include(p => p.Category)
+                    .Include(p => p.ProductCategory)
+                    .Where(p => p.Name.Contains(productName)).ToListAsync();
+                return View("Index", filterProducts);
+            }
+            if (String.IsNullOrEmpty(productName) && !String.IsNullOrEmpty(categoryName))
+            {
+                var filterProducts = await _context.Products.Include(p => p.Category)
+                    .Include(p => p.ProductCategory)
+                    .Where(p => p.ProductCategory.Name.Contains(categoryName)).ToListAsync();
+                return View("Index", filterProducts);
+            }
+
+            var filter_Products = await _context.Products.Include(p => p.Category)
+                    .Include(p => p.ProductCategory)
+                    .Where( p => (p.Name.Contains(productName)) && (p.ProductCategory.Name.Contains(categoryName)) ).ToListAsync();
+            return View("Index", filter_Products);
+        }
+
         private bool ProductExists(int id)
         {
-          return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

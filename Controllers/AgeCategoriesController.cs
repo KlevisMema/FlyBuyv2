@@ -21,9 +21,8 @@ namespace FlyBuy.Controllers
             {
                 return View(_context.AgeCategories.ToList());
             }
-            return View(_context.Products.Where(c => c.CategoryId == 2 && c.ProductCategoryId == id).ToList());
+            return View(_context.Products.Where(c => c.CategoryId == 3 && c.ProductCategoryId == id).ToList());
         }
-
 
         public IActionResult MenAgeProducts(int? id)
         {
@@ -31,7 +30,7 @@ namespace FlyBuy.Controllers
             {
                 return View(_context.AgeCategories.ToList());
             }
-            return View(_context.Products.Where(c => c.CategoryId == 1 && c.ProductCategoryId == id).ToList());
+            return View(_context.Products.Where(c => c.CategoryId == 2 && c.ProductCategoryId == id).ToList());
         }
 
         [Authorize(Roles = "Admin,Manager,Worker")]

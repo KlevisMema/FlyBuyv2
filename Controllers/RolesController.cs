@@ -87,7 +87,7 @@ namespace FlyBuy.Controllers
 
         }
 
-        //[Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             return View();
@@ -119,7 +119,5 @@ namespace FlyBuy.Controllers
 
             return View(model);
         }
-
-
     }
 }

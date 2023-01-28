@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FlyBuy.Data;
-using FlyBuy.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FlyBuy.Controllers
@@ -20,13 +14,23 @@ namespace FlyBuy.Controllers
             _context = context;
         }
 
-
         [Authorize(Roles = "Admin,Manager,Worker")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.OrderItems.Include(o => o.Order).Include(o => o.Product);
             
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        
+        [Authorize(Roles = "Admin,Manager,Worker")]
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            var orderDetails = await _context.OrderItems.Include(p=>p.Product).Where(o=>o.OrderId == id).ToListAsync();
+            var x = await _context.OrderItems.Where(o => o.OrderId == id).Select(n => n.Order.CustomerName).ToArrayAsync();
+            var y = x[1];
+            ViewData["Customer"] = y;
+            return View(orderDetails);
         }
 
         private bool OrderItemExists(int id)

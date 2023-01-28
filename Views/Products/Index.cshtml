@@ -10,6 +10,11 @@
    
     
     <h2 class="tbl-h2">@Html.ActionLink("Create New", "Create", "Products", new { @class = " btn-form" })</h2>
+    <form asp-action="FilterProducts" asp-controller="Products" method="get"  class="search">
+        <input type="text" placeholder="Product name..." name="productName"/>
+        <input type="text" placeholder="Category name.." name="categoryName" />
+        <input type="submit" value="Search" class="btnSearch"/>
+    </form>
     <div class="table-wrapper">
         
         <table class="fl-table" id="#tabela">
@@ -63,7 +68,6 @@
                     </td>
                     <td>
                         <textarea cols="30" rows="5" readonly style="cursor:default">@item.Description</textarea>
-                       @* @Html.DisplayFor(modelItem => item.Description)*@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.LastUpdated)

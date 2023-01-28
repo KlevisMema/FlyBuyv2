@@ -15,7 +15,7 @@ namespace FlyBuy.Controllers
             _context = context;
         }
 
-        const string wishListKey = "WishList";
+        private const string wishListKey = "WishList";
 
         [AllowAnonymous]
         public IActionResult Index()
